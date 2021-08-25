@@ -8,7 +8,7 @@ import time
 
 
 OUT_PATH = "data/osm/minnesota_roads.shp"
-NUM_TILES = 4
+NUM_TILES = 5
 target_values = [
         "motorway",
         "trunk",
@@ -38,7 +38,7 @@ def make_request(bounds: Tuple[float, float, float, float], attempt: int = 0):
     except OverpassTooManyRequests:
         print("Too many requests. Waiting 10 seconds before retrying.")
         time.sleep(10)
-        make_request(bounds, attempt + 1)
+        return make_request(bounds, attempt + 1)
 
 
 def get_roads_from_bounds(bounds: Tuple[float, float, float, float]) -> gpd.GeoDataFrame:
