@@ -7,6 +7,7 @@ name = "pypi"
 osmxtract = "*"
 geopandas = "*"
 pandas = "*"
+rtree = "*"
 
 [dev-packages]
 notebook = "*"
