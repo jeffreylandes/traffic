@@ -8,6 +8,7 @@ osmxtract = "*"
 geopandas = "*"
 pandas = "*"
 rtree = "*"
+requests = "*"
 
 [dev-packages]
 notebook = "*"

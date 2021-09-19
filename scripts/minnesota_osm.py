@@ -8,7 +8,7 @@ import time
 
 
 OUT_PATH = "data/osm/minnesota_roads.geojson"
-NUM_TILES = 4
+NUM_TILES = 5
 OSM_HIGHWAY_PRIORITY = {
     "motorway": 0,
     "trunk": 2,
