@@ -18,9 +18,9 @@ def select_best_match(intersection: gpd.GeoDataFrame):
 
 
 def main():
-    merged_osm_traffic = gpd.read_file("../data/traffic/raw_intersection_15.shp")
+    merged_osm_traffic = gpd.read_file("data/traffic/raw_intersection_15.shp")
     best_match = merged_osm_traffic.groupby("SEQUENCE_N").apply(lambda intersection: select_best_match(intersection))
-    return best_match
+    best_match[merged_osm_traffic.columns].to_file("data/traffic/merged_processed.shp", index=False)
 
 
 if __name__ == "__main__":

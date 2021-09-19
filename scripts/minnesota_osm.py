@@ -5,6 +5,7 @@ import numpy as np
 from typing import Tuple
 import pandas as pd
 import time
+import os
 
 
 OUT_PATH = "data/osm/minnesota_roads.geojson"
@@ -71,6 +72,8 @@ def main():
             all_roads.append(roads_iter)
             break
         break
+    if not os.path.exists("data/osm"):
+        os.mkdir("data/osm")
     final_dataframe = gpd.GeoDataFrame(pd.concat(all_roads, ignore_index=True))
     final_dataframe.to_file(OUT_PATH, driver="GeoJSON")
 
