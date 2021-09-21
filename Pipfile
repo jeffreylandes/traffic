@@ -9,12 +9,14 @@ geopandas = "*"
 pandas = "*"
 rtree = "*"
 requests = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 notebook = "*"
 jupyterlab = "*"
 matplotlib = "*"
 ipykernel = "*"
+yoyo-migrations = "*"
 
 [requires]
 python_version = "3.9"
