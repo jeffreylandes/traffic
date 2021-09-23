@@ -20,6 +20,10 @@ data/traffic/merged_processed.shp: data/traffic/merged_raw.shp
 	echo "Selecting the best batch for intersecting traffic points, based on OSM highway priority"
 	python scripts/select_best_match.py
 
-prepare-data: check-env data/traffic/merged_processed.shp
+data/traffic/final_processed.shp: data/traffic/merged_processed.shp
+	echo "Joining back with osm roads to get linestring geometry"
+	python scripts/rejoin_osm.py
+
+prepare-data: check-env data/traffic/final_processed.shp
 
 .PHONY: check-env

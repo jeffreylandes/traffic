@@ -1,12 +1,11 @@
 import geopandas as gpd
 from geopandas.tools import sjoin
-from scripts.minnesota_osm import OUT_PATH
+from scripts.constants import OSM_GEOJSON_PATH
 
 
 def main():
     # Load OSM roads and reproject geometry
-    osm_roads = gpd.read_file(OUT_PATH)
-    osm_roads['highway_tag'] = osm_roads.properties.apply(lambda row: row["highway"])
+    osm_roads = gpd.read_file(OSM_GEOJSON_PATH)
     osm_roads = osm_roads.to_crs("EPSG:26915")
     osm_roads['osm_geometry'] = osm_roads['geometry'].astype(str)
 

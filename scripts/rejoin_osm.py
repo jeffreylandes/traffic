@@ -1,4 +1,5 @@
 import geopandas as gpd
+from scripts.constants import ROAD_TAG_FEATURE_NAME
 
 
 FINAL_COLUMNS = {
@@ -14,7 +15,7 @@ def main():
     merged_roads = original_osm_roads.merge(traffic_counts, how="left", on="id")
     merged_roads['geometry'] = merged_roads['geometry_x']
     merged_roads.rename(columns=FINAL_COLUMNS, inplace=True)
-    final_table = merged_roads[["osm_id", "ADT", "geometry"]]
+    final_table = merged_roads[["osm_id", "ADT", "geometry", ROAD_TAG_FEATURE_NAME]]
     gpd.GeoDataFrame(final_table).to_file("data/traffic/final_processed.shp")
 
 

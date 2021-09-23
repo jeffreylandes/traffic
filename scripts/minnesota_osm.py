@@ -6,9 +6,9 @@ from typing import Tuple
 import pandas as pd
 import time
 import os
+from scripts.constants import ROAD_TAG_FEATURE_NAME, OSM_GEOJSON_PATH
 
 
-OUT_PATH = "data/osm/minnesota_roads.geojson"
 NUM_TILES = 5
 OSM_HIGHWAY_PRIORITY = {
     "motorway": 0,
@@ -75,7 +75,8 @@ def main():
     if not os.path.exists("data/osm"):
         os.mkdir("data/osm")
     final_dataframe = gpd.GeoDataFrame(pd.concat(all_roads, ignore_index=True))
-    final_dataframe.to_file(OUT_PATH, driver="GeoJSON")
+    final_dataframe[ROAD_TAG_FEATURE_NAME] = final_dataframe.properties.apply(lambda row: row["highway"])
+    final_dataframe.to_file(OSM_GEOJSON_PATH, driver="GeoJSON")
 
 
 if __name__ == "__main__":
