@@ -24,6 +24,10 @@ data/traffic/final_processed.shp: data/traffic/merged_processed.shp
 	echo "Joining back with osm roads to get linestring geometry"
 	python scripts/rejoin_osm.py
 
-prepare-data: check-env data/traffic/final_processed.shp
+data/graphs/road_graph_network.pickle: data/traffic/final_processed.shp
+	echo "Creating a network graph from the road dataset"
+	python scripts/construct_graph.py
+
+prepare-data: check-env data/graphs/road_graph_network.pickle
 
 .PHONY: check-env
