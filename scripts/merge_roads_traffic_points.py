@@ -1,6 +1,6 @@
 import geopandas as gpd
 from geopandas.tools import sjoin
-from scripts.constants import OSM_GEOJSON_PATH
+from scripts.constants import OSM_GEOJSON_PATH, OSM_TRAFFIC_INITIAL_MERGE_PATH
 
 
 def main():
@@ -15,7 +15,7 @@ def main():
     traffic_points["original_geometry"] = traffic_points.geometry.astype(str)
     traffic_points["geometry"] = traffic_points.buffer(15)
     intersection = sjoin(traffic_points, osm_roads, how="left")
-    intersection.to_file(f"data/traffic/raw_intersection_15.shp")
+    intersection.to_file(OSM_TRAFFIC_INITIAL_MERGE_PATH)
 
 
 if __name__ == "__main__":

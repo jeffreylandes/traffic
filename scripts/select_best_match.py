@@ -2,7 +2,7 @@ import geopandas as gpd
 from scripts.minnesota_osm import OSM_HIGHWAY_PRIORITY
 from collections import defaultdict
 import numpy as np
-from scripts.constants import ROAD_TAG_FEATURE_NAME
+from scripts.constants import ROAD_TAG_FEATURE_NAME, OSM_TRAFFIC_FILTERED_MERGE_PATH, OSM_TRAFFIC_INITIAL_MERGE_PATH
 
 
 def select_best_match(intersection: gpd.GeoDataFrame):
@@ -19,11 +19,11 @@ def select_best_match(intersection: gpd.GeoDataFrame):
 
 
 def main():
-    merged_osm_traffic = gpd.read_file("data/traffic/raw_intersection_15.shp")
+    merged_osm_traffic = gpd.read_file(OSM_TRAFFIC_INITIAL_MERGE_PATH)
     best_match = merged_osm_traffic.groupby("SEQUENCE_N").apply(lambda intersection: select_best_match(intersection))
     best_match = best_match[merged_osm_traffic.columns]
     del best_match[ROAD_TAG_FEATURE_NAME]
-    best_match.to_file("data/traffic/merged_processed.shp", index=False)
+    best_match.to_file(OSM_TRAFFIC_FILTERED_MERGE_PATH, index=False)
 
 
 if __name__ == "__main__":

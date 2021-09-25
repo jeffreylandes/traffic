@@ -3,9 +3,11 @@ import geopandas as gpd
 from geopandas.tools import sjoin
 import os
 
+from scripts.constants import PROCESSED_MERGED_PATH
+
 
 def main():
-    data = gpd.read_file("data/traffic/final_processed.shp")
+    data = gpd.read_file(PROCESSED_MERGED_PATH)
     data_as_dict = data.to_dict('index')
     data_as_nodes_with_attributes = list(data_as_dict.items())
 

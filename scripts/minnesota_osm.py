@@ -72,8 +72,6 @@ def main():
             all_roads.append(roads_iter)
             break
         break
-    if not os.path.exists("data/osm"):
-        os.mkdir("data/osm")
     final_dataframe = gpd.GeoDataFrame(pd.concat(all_roads, ignore_index=True))
     final_dataframe[ROAD_TAG_FEATURE_NAME] = final_dataframe.properties.apply(lambda row: row["highway"])
     final_dataframe.to_file(OSM_GEOJSON_PATH, driver="GeoJSON")
