@@ -2,6 +2,7 @@ data/traffic/minnesota_traffic.zip:
 	echo "Optionally creating relevant directories"
 	mkdir -p data/traffic
 	mkdir -p data/osm
+	mkdir -p data/ml
 	echo "Downloading traffic values"
 	python scripts/minnesota_traffic.py
 

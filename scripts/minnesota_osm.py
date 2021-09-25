@@ -21,7 +21,7 @@ OSM_HIGHWAY_PRIORITY = {
     "trunk_link": 3,
     "primary_link": 5,
     "secondary_link": 7,
-    "tertiary_link": 9
+    "tertiary_link": 9,
 }
 target_values = list(OSM_HIGHWAY_PRIORITY.keys())
 
@@ -31,11 +31,7 @@ def make_request(bounds: Tuple[float, float, float, float], attempt: int = 0):
         raise Exception("Too many requests.")
     try:
         print(f"Making a overpass request with bounds: {bounds}")
-        query = overpass.ql_query(
-            bounds,
-            tag="highway",
-            values=target_values
-        )
+        query = overpass.ql_query(bounds, tag="highway", values=target_values)
         response = overpass.request(query)
         return response
     except OverpassTooManyRequests:
@@ -44,7 +40,9 @@ def make_request(bounds: Tuple[float, float, float, float], attempt: int = 0):
         return make_request(bounds, attempt + 1)
 
 
-def get_roads_from_bounds(bounds: Tuple[float, float, float, float]) -> gpd.GeoDataFrame:
+def get_roads_from_bounds(
+    bounds: Tuple[float, float, float, float]
+) -> gpd.GeoDataFrame:
     response = make_request(bounds)
     feature_collection = overpass.as_geojson(response, "linestring")
     if len(feature_collection["features"]):
@@ -73,7 +71,9 @@ def main():
             break
         break
     final_dataframe = gpd.GeoDataFrame(pd.concat(all_roads, ignore_index=True))
-    final_dataframe[ROAD_TAG_FEATURE_NAME] = final_dataframe.properties.apply(lambda row: row["highway"])
+    final_dataframe[ROAD_TAG_FEATURE_NAME] = final_dataframe.properties.apply(
+        lambda row: row["highway"]
+    )
     final_dataframe.to_file(OSM_GEOJSON_PATH, driver="GeoJSON")
 
 
