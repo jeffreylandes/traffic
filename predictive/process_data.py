@@ -124,6 +124,7 @@ def main():
                 print(f"Saving data item to {_id_path}")
                 np.save(os.path.join(_id_path, "adjacency.npy"), adj_matrix.to_numpy())
                 np.save(os.path.join(_id_path, "features.npy"), feature_matrix.to_numpy())
+                np.save(os.path.join(_id_path, "targets.npy"), feature_matrix[ADT_KNOWN_FEATURE].to_numpy())
 
 
 if __name__ == "__main__":
