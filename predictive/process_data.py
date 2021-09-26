@@ -5,15 +5,22 @@ from shapely.geometry import Polygon
 import pandas as pd
 from geopandas.tools import sjoin
 import networkx as nx
+import os
+from uuid import uuid4
 
-from scripts.constants import FEATURE_DATA_PATH
+from scripts.constants import FEATURE_DATA_PATH, ADT_KNOWN_FEATURE
 
 
+VERSION = "vTest"
 MAX_ROAD_NETWORK_SIZE = 100
-MAX_STRIDE = 0.01
+MAX_STRIDE = 0.40
+"""FEATURE_COLUMNS = [
+    "adt_known", "adt_1", "motorway_l", "primary", "primary_link", "secondary_", "tertiary", "tertiary_link",
+    "trunk", "trunk_link", "residentia", "num_surrou"
+]"""
 FEATURE_COLUMNS = [
-    "adt_known", "adt", "motorway_link", "primary", "primary_link", "secondary_link", "tertiary", "tertiary_link",
-    "trunk", "trunk_link", "num_surrounding_roads"
+    "adt_known", "adt_1", "motorway_l", "primary", "secondary_", "tertiary",
+    "residentia", "num_surrou"
 ]
 
 Bounds = Tuple[float, float, float, float]
@@ -74,7 +81,10 @@ def recursively_get_polygon_bounds(data: gpd.GeoDataFrame, bounds: Bounds) -> Op
     if np.sum(intersection_indices) > MAX_ROAD_NETWORK_SIZE:
         new_bounds = split_bounds(bounds)
         for b in new_bounds:
-            intersecting_dfs.extend(recursively_get_polygon_bounds(data, b))
+            recursive_intersecting_dfs = recursively_get_polygon_bounds(data, b)
+            if recursive_intersecting_dfs is not None:
+                intersecting_dfs.extend(recursively_get_polygon_bounds(data, b))
+        return intersecting_dfs
     elif np.sum(intersection_indices) == 0:
         return None
     return [
@@ -86,14 +96,35 @@ def main():
     data = gpd.read_file(FEATURE_DATA_PATH)
     x_min, y_min, x_max, y_max = data.total_bounds
 
+    data_dir = f"predictive/data/{VERSION}"
+    if not os.path.exists(data_dir):
+        os.mkdir(data_dir)
+
     for x in np.arange(x_min, x_max, MAX_STRIDE):
         for y in np.arange(y_min, y_max, MAX_STRIDE):
             bounds = (x, y, x + MAX_STRIDE, y + MAX_STRIDE)
+
+            initial_polygon = get_polygon_from_bounds(bounds)
+            if np.sum(data[data.within(initial_polygon)][ADT_KNOWN_FEATURE]) == 0:
+                continue
 
             intersecting_dfs = recursively_get_polygon_bounds(data, bounds)
             if intersecting_dfs is None:
                 continue
 
             for intersecting_df in intersecting_dfs:
+                if np.sum(intersecting_df[ADT_KNOWN_FEATURE]) <= 1:
+                    continue
                 adj_matrix = get_adjacency_matrix(intersecting_df)
                 feature_matrix = get_feature_matrix(intersecting_df)
+
+                _id = str(uuid4())
+                _id_path = os.path.join(data_dir, _id)
+                os.mkdir(_id_path)
+                print(f"Saving data item to {_id_path}")
+                np.save(os.path.join(_id_path, "adjacency.npy"), adj_matrix.to_numpy())
+                np.save(os.path.join(_id_path, "features.npy"), feature_matrix.to_numpy())
+
+
+if __name__ == "__main__":
+    main()
