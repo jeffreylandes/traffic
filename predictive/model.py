@@ -17,6 +17,6 @@ class GraphCNN(nn.Module):
             nn.ReLU()
         )
 
-    def forward(self, x, mask):
-        self.prediction = self.cnn_layers(x)
-        return self.prediction * mask
+    def forward(self, x, adjacency_matrix, mask):
+        prediction = self.cnn_layers(x)
+        return prediction * mask

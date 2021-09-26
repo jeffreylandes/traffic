@@ -50,6 +50,7 @@ class TrafficData(Dataset):
         data_item = {
             "adjacency": adjacency_matrix_processed,
             "features": feature_matrix_processed,
+            "targets": targets,
             "mask": mask
         }
 
