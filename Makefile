@@ -30,6 +30,6 @@ data/traffic/final_processed.shp: data/traffic/merged_processed.shp
 
 data/ml/initial_feature_data.shp: data/traffic/final_processed.shp
 
-prepare-data: check-env data/ml/initial_feature_data.shp
+prepare-data: check-env data/traffic/final_processed.shp
 
 .PHONY: check-env

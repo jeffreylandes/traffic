@@ -20,7 +20,7 @@ class CNNBlock(nn.Module):
 
 class GraphCNN(nn.Module):
 
-    def __init__(self, num_in_channels=2, num_out_channels=1):
+    def __init__(self, num_in_channels=1, num_out_channels=1):
         super(GraphCNN, self).__init__()
 
         self.first_layer = CNNBlock(num_in_channels, 4, 3, 1, 1)

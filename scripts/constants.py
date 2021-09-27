@@ -10,7 +10,7 @@ OSM_TRAFFIC_FILTERED_MERGE_PATH = os.getenv(
     "TRAFFIC_OSM_SELECTION_PATH", "data/osm/minnesota_roads.geojson"
 )
 OSM_TRAFFIC_INITIAL_MERGE_PATH = os.getenv(
-    "OSM_TRAFFIC_INITIAL_MERGE_PATH", "data/traffic/raw_intersection_15.shp"
+    "OSM_TRAFFIC_INITIAL_MERGE_PATH", "data/traffic/merged_raw.shp"
 )
 TRAFFIC_ZIP_PATH = os.getenv("TRAFFIC_ZIP_PATH", "data/traffic/minnesota_traffic.zip")
 TRAFFIC_URL = os.getenv(

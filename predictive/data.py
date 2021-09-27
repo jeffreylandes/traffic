@@ -7,14 +7,19 @@ from predictive.process_data import MAX_ROAD_NETWORK_SIZE
 
 
 ADJACENCY_PATH = "adjacency.npy"
-FEATURE_PATH = "feature.npy"
+FEATURE_PATH = "features.npy"
 TARGETS_PATH = "targets.npy"
+
+
+def add_axis(array: np.ndarray) -> np.ndarray:
+    return np.expand_dims(array, axis=0)
 
 
 class TrafficData(Dataset):
 
     def __init__(self, data_dir="predictive/data/vTest"):
         self._ids = os.listdir(data_dir)
+        self.data_dir = data_dir
         self.cache_size = 300
         self.cache = {}
 
@@ -27,10 +32,10 @@ class TrafficData(Dataset):
             return self.cache[item]
 
         item_dir = self._ids[item]
-        adjacency_matrix = np.load(os.path.join(item_dir, ADJACENCY_PATH))
-        feature_matrix = np.load(os.path.join(item_dir, FEATURE_PATH))
-        targets = np.load(os.path.join(item_dir, TARGETS_PATH))
-        assert adjacency_matrix.shape == feature_matrix.shape
+        adjacency_matrix = np.load(os.path.join(self.data_dir, item_dir, ADJACENCY_PATH))
+        feature_matrix = np.load(os.path.join(self.data_dir, item_dir, FEATURE_PATH))
+        targets = np.load(os.path.join(self.data_dir, item_dir, TARGETS_PATH))
+        assert adjacency_matrix.shape[0] == feature_matrix.shape[0]
 
         node_degrees = np.sum(adjacency_matrix, axis=0)
         diagonal_matrix = np.zeros_like(adjacency_matrix)
@@ -41,17 +46,19 @@ class TrafficData(Dataset):
 
         adjacency_matrix_processed = np.zeros((MAX_ROAD_NETWORK_SIZE, MAX_ROAD_NETWORK_SIZE))
         feature_matrix_processed = np.zeros((MAX_ROAD_NETWORK_SIZE, MAX_ROAD_NETWORK_SIZE))
+        targets_processed = np.zeros((MAX_ROAD_NETWORK_SIZE, MAX_ROAD_NETWORK_SIZE))
         adjacency_matrix_processed[:adjacency_matrix.shape[0], :adjacency_matrix.shape[1]] = adjacency_matrix_standardized
         feature_matrix_processed[:feature_matrix.shape[0], :feature_matrix.shape[1]] = feature_matrix
+        targets_processed[:adjacency_matrix.shape[0], :adjacency_matrix.shape[1]] = targets
 
-        mask = np.zeros_like(targets)
-        mask[np.where(targets) != 0] = 1
+        mask = np.zeros_like(targets_processed)
+        mask[np.where(targets_processed) != 0] = 1
 
         data_item = {
-            "adjacency": adjacency_matrix_processed,
-            "features": feature_matrix_processed,
-            "targets": targets,
-            "mask": mask
+            "adjacency": add_axis(adjacency_matrix_processed).astype(np.float32),
+            "features": add_axis(feature_matrix_processed).astype(np.float32),
+            "targets": add_axis(targets_processed).astype(np.float32),
+            "mask": add_axis(mask).astype(np.float32)
         }
 
         if len(self.cache) < self.cache_size:

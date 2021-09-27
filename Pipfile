@@ -12,6 +12,7 @@ requests = "*"
 psycopg2-binary = "*"
 networkx = "*"
 torch = "*"
+scipy = "*"
 
 [dev-packages]
 notebook = "*"

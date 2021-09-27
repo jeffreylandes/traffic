@@ -17,6 +17,7 @@ def train():
     optimizer = Adam(model.parameters(), lr=0.001)
 
     data = TrafficData()
+    print(f"Number of samples: {len(data)}")
     data_loader = DataLoader(data, batch_size=5, shuffle=True)
 
     for epoch in range(10):
@@ -35,3 +36,7 @@ def train():
             loss = criterion(prediction, targets)
             loss.backward()
             optimizer.step()
+
+
+if __name__ == "__main__":
+    train()
