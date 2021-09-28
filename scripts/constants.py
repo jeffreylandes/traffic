@@ -7,7 +7,7 @@ PROCESSED_MERGED_PATH = os.getenv(
     "PROCESSED_MERGED_PATH", "data/traffic/final_processed.shp"
 )
 OSM_TRAFFIC_FILTERED_MERGE_PATH = os.getenv(
-    "TRAFFIC_OSM_SELECTION_PATH", "data/osm/minnesota_roads.geojson"
+    "TRAFFIC_OSM_SELECTION_PATH", "data/traffic/merged_filtered.shp"
 )
 OSM_TRAFFIC_INITIAL_MERGE_PATH = os.getenv(
     "OSM_TRAFFIC_INITIAL_MERGE_PATH", "data/traffic/merged_raw.shp"

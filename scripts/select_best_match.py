@@ -11,7 +11,7 @@ from scripts.constants import (
 
 def select_best_match(intersection: gpd.GeoDataFrame):
     if len(intersection) == 1:
-        return intersection
+        return intersection.iloc[0]
     reversed_priorities = defaultdict(list)
     for index, row in intersection.iterrows():
         priority = OSM_HIGHWAY_PRIORITY[row[ROAD_TAG_FEATURE_NAME]]
@@ -19,7 +19,8 @@ def select_best_match(intersection: gpd.GeoDataFrame):
     highest_priority = np.min(list(reversed_priorities.keys()))
     matches = reversed_priorities[highest_priority]
     magic_match_index = matches[0]
-    return intersection.loc[magic_match_index]
+    intersection_index = intersection.index.get_loc(magic_match_index)
+    return intersection.iloc[intersection_index]
 
 
 def main():
