@@ -13,6 +13,7 @@ class GraphBlock(nn.Module):
         self.weights = nn.Parameter(torch.FloatTensor(in_dimensions, out_dimension), requires_grad=True)
         self.reset_parameters()
 
+    # TODO: Flexible wrt batch size
     def forward(self, feature_map, adjacency_matrix):
         new_feature_map = torch.mm(feature_map, self.weights)
         new_feature_map = torch.spmm(adjacency_matrix, new_feature_map)
@@ -29,17 +30,14 @@ class GraphBlock(nn.Module):
 
 class GraphCNN(nn.Module):
 
-    def __init__(self, num_in_dimensions=10, num_out_dimensions=1):
+    def __init__(self, num_in_dimensions=12, num_out_dimensions=1):
         super(GraphCNN, self).__init__()
 
-        self.layers = []
-        for i in range(10, 2, -1):
-            self.layers.append(GraphBlock(i, i - 1))
-        self.layers.append(GraphBlock(2, 1, bias=False))
-        print(self.layers)
+        self.graph_block_1 = GraphBlock(num_in_dimensions, 6)
+        self.graph_block_2 = GraphBlock(6, num_out_dimensions)
 
     def forward(self, x, adjacency_matrix, mask):
-        feature_map = x
-        for layer in self.layers:
-            feature_map = layer(feature_map, adjacency_matrix)
+        feature_map = self.graph_block_1(x, adjacency_matrix)
+        feature_map = self.graph_block_2(feature_map, adjacency_matrix)
+        feature_map = torch.squeeze(feature_map)
         return feature_map * mask

@@ -19,16 +19,17 @@ def train():
 
     data = TrafficData()
     print(f"Number of samples: {len(data)}")
-    data_loader = DataLoader(data, batch_size=5, shuffle=True)
+    data_loader = DataLoader(data, batch_size=1, shuffle=True)
 
     for epoch in range(10):
         print(f"Starting epoch {epoch}")
+        epoch_loss = 0
 
         for step, data_item in enumerate(data_loader):
-            feature_matrix = data_item["features"]
-            adjacency_matrix = data_item["adjacency"]
-            targets = data_item["targets"]
-            mask = data_item["mask"]
+            feature_matrix = data_item["features"][0]
+            adjacency_matrix = data_item["adjacency"][0]
+            targets = data_item["targets"][0]
+            mask = data_item["mask"][0]
 
             prediction = model(feature_matrix, adjacency_matrix, mask)
 
@@ -37,6 +38,10 @@ def train():
             loss = criterion(prediction, targets)
             loss.backward()
             optimizer.step()
+
+            epoch_loss += loss.item()
+
+        print(f"Loss for epoch {epoch}: {round(epoch_loss, 4)}")
 
 
 if __name__ == "__main__":
