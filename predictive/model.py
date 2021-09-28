@@ -1,37 +1,45 @@
 import torch.nn as nn
-from torch import matmul
+import torch
+import math
 
 
-class CNNBlock(nn.Module):
+class GraphBlock(nn.Module):
 
-    def __init__(self, in_channels, out_channels, kernel_size, stride, padding):
-        super(CNNBlock, self).__init__()
-
-        self.cnn_layer = nn.Sequential(
-            nn.Conv2d(in_channels, out_channels, kernel_size, stride, padding),
-            nn.BatchNorm2d(out_channels),
-            nn.ReLU()
-        )
+    def __init__(self, in_dimensions, out_dimension, bias=True):
+        super(GraphBlock, self).__init__()
+        self.bias = None
+        if bias:
+            self.bias = nn.Parameter(torch.FloatTensor(out_dimension), requires_grad=True)
+        self.weights = nn.Parameter(torch.FloatTensor(in_dimensions, out_dimension), requires_grad=True)
+        self.reset_parameters()
 
     def forward(self, feature_map, adjacency_matrix):
-        new_feature_map = self.cnn_layer(feature_map)
-        return matmul(new_feature_map, adjacency_matrix)
+        new_feature_map = torch.mm(feature_map, self.weights)
+        new_feature_map = torch.spmm(adjacency_matrix, new_feature_map)
+        if self.bias is not None:
+            new_feature_map = new_feature_map + self.bias
+        return new_feature_map
+
+    def reset_parameters(self):
+        stdv = 1. / math.sqrt(self.weights.size(1))
+        self.weights.data.uniform_(-stdv, stdv)
+        if self.bias is not None:
+            self.bias.data.uniform_(-stdv, stdv)
 
 
 class GraphCNN(nn.Module):
 
-    def __init__(self, num_in_channels=1, num_out_channels=1):
+    def __init__(self, num_in_dimensions=10, num_out_dimensions=1):
         super(GraphCNN, self).__init__()
 
-        self.first_layer = CNNBlock(num_in_channels, 4, 3, 1, 1)
-        self.second_layer = CNNBlock(4, 8, 3, 1, 1)
-        self.out_layer = nn.Sequential(
-            nn.Conv2d(8, num_out_channels, 3, 1, 1),
-            nn.ReLU()
-        )
+        self.layers = []
+        for i in range(10, 2, -1):
+            self.layers.append(GraphBlock(i, i - 1))
+        self.layers.append(GraphBlock(2, 1, bias=False))
+        print(self.layers)
 
     def forward(self, x, adjacency_matrix, mask):
-        feature_map = self.first_layer(x, adjacency_matrix)
-        feature_map = self.second_layer(feature_map, adjacency_matrix)
-        prediction = matmul(self.out_layer(feature_map), adjacency_matrix)
-        return prediction * mask
+        feature_map = x
+        for layer in self.layers:
+            feature_map = layer(feature_map, adjacency_matrix)
+        return feature_map * mask

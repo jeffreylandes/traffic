@@ -14,13 +14,9 @@ from scripts.constants import FEATURE_DATA_PATH, ADT_KNOWN_FEATURE
 VERSION = "vTest"
 MAX_ROAD_NETWORK_SIZE = 100
 MAX_STRIDE = 0.40
-"""FEATURE_COLUMNS = [
+FEATURE_COLUMNS = [
     "adt_known", "adt_1", "motorway_l", "primary", "primary_link", "secondary_", "tertiary", "tertiary_link",
     "trunk", "trunk_link", "residentia", "num_surrou"
-]"""
-FEATURE_COLUMNS = [
-    "adt_known", "adt_1", "motorway_l", "primary", "secondary_", "tertiary",
-    "residentia", "num_surrou"
 ]
 
 Bounds = Tuple[float, float, float, float]

@@ -8,7 +8,7 @@ import time
 from scripts.constants import ROAD_TAG_FEATURE_NAME, OSM_GEOJSON_PATH
 
 
-NUM_TILES = 5
+NUM_TILES = 10
 OSM_HIGHWAY_PRIORITY = {
     "motorway": 0,
     "trunk": 2,
@@ -44,7 +44,7 @@ def get_roads_from_bounds(
 ) -> gpd.GeoDataFrame:
     response = make_request(bounds)
     feature_collection = overpass.as_geojson(response, "linestring")
-    if len(feature_collection["features"]):
+    if len(feature_collection["features"]) == 0:
         response = make_request(bounds)
         feature_collection = overpass.as_geojson(response, "linestring")
     print(f"Number of roads: {len(feature_collection['features'])}")

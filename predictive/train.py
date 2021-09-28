@@ -3,7 +3,7 @@ from torch.optim import Adam
 import torch.nn as nn
 import torch
 
-from predictive.data import TrafficData
+from predictive.dataset import TrafficData
 from predictive.model import GraphCNN
 
 
@@ -12,6 +12,7 @@ def train():
     torch.set_default_dtype(torch.float32)
 
     model = GraphCNN()
+    model.train()
 
     criterion = nn.L1Loss()
     optimizer = Adam(model.parameters(), lr=0.001)
