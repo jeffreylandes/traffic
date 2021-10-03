@@ -14,7 +14,7 @@ from scripts.constants import FEATURE_DATA_PATH, ADT_KNOWN_FEATURE
 from logs import log
 
 
-VERSION = "v2"
+VERSION = os.getenv("VERSION", "vTest")
 MAX_ROAD_NETWORK_SIZE = 100
 MAX_STRIDE = 1.0
 TRAIN_VALIDATION_SPLIT = 0.9

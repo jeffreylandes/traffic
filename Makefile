@@ -3,6 +3,7 @@ data/traffic/minnesota_traffic.zip:
 	mkdir -p data/traffic
 	mkdir -p data/osm
 	mkdir -p data/ml
+	export VERSION=v3
 	echo "Downloading traffic values"
 	python scripts/minnesota_traffic.py
 
@@ -29,7 +30,13 @@ data/traffic/final_processed.shp: data/traffic/merged_processed.shp
 	python scripts/rejoin_osm.py
 
 data/ml/initial_feature_data.shp: data/traffic/final_processed.shp
+	echo "Generating features for dataset"
+	python predictive/scripts/feature_engineer.py
 
-prepare-data: check-env data/traffic/final_processed.shp
+predictive/data/$VERSION/$VERSION.hdf5: data/ml/initial_feature_data.shp
+	echo "Extracting graph representations of localized regions for training and validation data"
+	python predictive/scripts/process_data.py
+
+prepare-data: check-env predictive/data/$VERSION/$VERSION.hdf5
 
 .PHONY: check-env

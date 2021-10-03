@@ -1,10 +1,9 @@
 from torch.utils.data import Dataset
 import numpy as np
-from scipy.linalg import sqrtm
 from math import ceil
 import h5py
 
-from predictive.process_data import FEATURE_COLUMNS
+from predictive.scripts.process_data import FEATURE_COLUMNS
 
 
 ADJACENCY_PATH = "adjacency.npy"
