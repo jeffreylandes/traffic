@@ -16,7 +16,7 @@ from logs import log
 
 VERSION = "v2"
 MAX_ROAD_NETWORK_SIZE = 100
-MAX_STRIDE = 0.40
+MAX_STRIDE = 1.0
 FEATURE_COLUMNS = [
     "adt_known", "adt_1", "motorway_l", "primary", "primary_li", "secondary_", "tertiary", "tertiary_l",
     "trunk", "trunk_link", "residentia", "num_nearby"
@@ -80,9 +80,9 @@ def recursively_get_polygon_bounds(data: gpd.GeoDataFrame, bounds: Bounds) -> Op
     if np.sum(intersection_indices) > MAX_ROAD_NETWORK_SIZE:
         new_bounds = split_bounds(bounds)
         for b in new_bounds:
-            recursive_intersecting_dfs = recursively_get_polygon_bounds(data, b)
+            recursive_intersecting_dfs = recursively_get_polygon_bounds(data[intersection_indices], b)
             if recursive_intersecting_dfs is not None:
-                intersecting_dfs.extend(recursively_get_polygon_bounds(data, b))
+                intersecting_dfs.extend(recursive_intersecting_dfs)
         return intersecting_dfs
     elif np.sum(intersection_indices) == 0:
         return None
@@ -95,10 +95,11 @@ def get_relevant_data_for_coordinate_location(data: gpd.GeoDataFrame, data_dir: 
     bounds = (x, y, x + MAX_STRIDE, y + MAX_STRIDE)
 
     initial_polygon = get_polygon_from_bounds(bounds)
-    if np.sum(data[data.within(initial_polygon)][ADT_KNOWN_FEATURE]) == 0:
+    data_within_polygon = data[data.within(initial_polygon)]
+    if np.sum(data_within_polygon[ADT_KNOWN_FEATURE]) == 0:
         return
 
-    intersecting_dfs = recursively_get_polygon_bounds(data, bounds)
+    intersecting_dfs = recursively_get_polygon_bounds(data_within_polygon, bounds)
     if intersecting_dfs is None:
         return
 
