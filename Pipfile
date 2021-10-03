@@ -13,6 +13,7 @@ psycopg2-binary = "*"
 networkx = "*"
 torch = "*"
 scipy = "*"
+h5py = "*"
 
 [dev-packages]
 notebook = "*"

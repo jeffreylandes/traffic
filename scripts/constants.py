@@ -20,4 +20,6 @@ TRAFFIC_URL = os.getenv(
 FEATURE_DATA_PATH = os.getenv("FEATURE_DATA_PATH", "data/ml/initial_feature_data.shp")
 ADT_KNOWN_FEATURE = os.getenv("ADT_KNOWN_FEATURE", "adt_known")
 ADT_FEATURE = os.getenv("ADT_FEATURE", "adt")
-NUMBER_SURROUNDING_ROADS_FEATURE = os.getenv("NUMBER_SURROUNDING_ROADS_FEATURE", "num_surrounding_roads")
+NUMBER_SURROUNDING_ROADS_FEATURE = os.getenv(
+    "NUMBER_SURROUNDING_ROADS_FEATURE", "num_surrounding_roads"
+)

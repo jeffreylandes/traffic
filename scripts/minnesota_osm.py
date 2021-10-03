@@ -67,7 +67,9 @@ def main():
             bounds = (x_start, y_start, x_end, y_end)
             roads_iter = get_roads_from_bounds(bounds)
             all_roads.append(roads_iter)
-    final_dataframe = gpd.GeoDataFrame(pd.concat(all_roads, ignore_index=True), crs="EPSG:4326")
+    final_dataframe = gpd.GeoDataFrame(
+        pd.concat(all_roads, ignore_index=True), crs="EPSG:4326"
+    )
     final_dataframe[ROAD_TAG_FEATURE_NAME] = final_dataframe.properties.apply(
         lambda row: row["highway"]
     )

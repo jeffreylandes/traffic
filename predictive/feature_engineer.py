@@ -25,9 +25,7 @@ def main():
     data_with_road_encoding = gpd.GeoDataFrame(
         {**data.to_dict(), **road_tags.to_dict()}, crs="4326"
     )
-    log.info(
-        "Getting the number of surrounding roads for each road."
-    )
+    log.info("Getting the number of surrounding roads for each road.")
     data_with_num_nearby_roads = get_num_nearby_roads(data_with_road_encoding)
     data_with_num_nearby_roads.to_file(FEATURE_DATA_PATH, index=False)
 

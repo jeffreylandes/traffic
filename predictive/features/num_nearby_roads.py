@@ -13,9 +13,7 @@ def get_num_nearby_roads(data: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
     point_tree = spatial.cKDTree(data[["point_x", "point_y"]])
     data["num_nearby_roads"] = data.apply(
         lambda row: len(
-            point_tree.query_ball_point(
-                np.array([row["point_x"], row["point_y"]]), 0.1
-            )
+            point_tree.query_ball_point(np.array([row["point_x"], row["point_y"]]), 0.1)
         ),
         axis=1,
     )
