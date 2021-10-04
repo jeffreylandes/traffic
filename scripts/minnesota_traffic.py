@@ -1,6 +1,6 @@
 import requests
 
-from scripts.constants import TRAFFIC_ZIP_PATH, TRAFFIC_URL
+from constants import TRAFFIC_ZIP_PATH, TRAFFIC_URL
 
 
 def main():

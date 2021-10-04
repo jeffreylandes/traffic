@@ -10,7 +10,7 @@ from itertools import product
 import h5py
 from dataclasses import dataclass
 
-from scripts.constants import FEATURE_DATA_PATH, ADT_KNOWN_FEATURE
+from constants import STANDARDIZED_FEATURE_DATA_PATH, ADT_KNOWN_FEATURE
 from logs import log
 
 
@@ -168,7 +168,7 @@ def add_item_to_dataset(dataset: h5py.Dataset, item: np.ndarray):
 
 
 def main():
-    data = gpd.read_file(FEATURE_DATA_PATH)
+    data = gpd.read_file(STANDARDIZED_FEATURE_DATA_PATH)
     log.info("Read data into memory.")
     x_min, y_min, x_max, y_max = data.total_bounds
 

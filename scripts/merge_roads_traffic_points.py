@@ -1,6 +1,6 @@
 import geopandas as gpd
 from geopandas.tools import sjoin
-from scripts.constants import OSM_GEOJSON_PATH, OSM_TRAFFIC_INITIAL_MERGE_PATH
+from constants import OSM_GEOJSON_PATH, OSM_TRAFFIC_INITIAL_MERGE_PATH
 
 
 def main():

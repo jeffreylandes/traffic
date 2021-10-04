@@ -1,5 +1,5 @@
 import geopandas as gpd
-from scripts.constants import (
+from constants import (
     ROAD_TAG_FEATURE_NAME,
     OSM_GEOJSON_PATH,
     PROCESSED_MERGED_PATH,

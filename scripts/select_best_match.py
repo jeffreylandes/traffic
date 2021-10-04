@@ -2,7 +2,7 @@ import geopandas as gpd
 from scripts.minnesota_osm import OSM_HIGHWAY_PRIORITY
 from collections import defaultdict
 import numpy as np
-from scripts.constants import (
+from constants import (
     ROAD_TAG_FEATURE_NAME,
     OSM_TRAFFIC_FILTERED_MERGE_PATH,
     OSM_TRAFFIC_INITIAL_MERGE_PATH,

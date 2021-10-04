@@ -33,7 +33,11 @@ data/ml/initial_feature_data.shp: data/traffic/final_processed.shp
 	echo "Generating features for dataset"
 	python predictive/scripts/feature_engineer.py
 
-predictive/data/$VERSION/$VERSION.hdf5: data/ml/initial_feature_data.shp
+data/ml/standardized_feature_data.shp: data/ml/initial_feature_data.shp
+	echo "Standardizing features"
+	python predictive/scripts/standardize_data.py
+
+predictive/data/$VERSION/$VERSION.hdf5: data/ml/standardized_feature_data.shp
 	echo "Extracting graph representations of localized regions for training and validation data"
 	python predictive/scripts/process_data.py
 

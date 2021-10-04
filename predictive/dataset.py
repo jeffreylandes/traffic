@@ -19,7 +19,7 @@ def add_axis(array: np.ndarray) -> np.ndarray:
 
 
 class TrafficData(Dataset):
-    def __init__(self, path="predictive/data/v2/v2.hdf5", group="train"):
+    def __init__(self, path="predictive/data/v3/v3.hdf5", group="train"):
         self.h5_file = h5py.File(path, "r")
         self.data = self.h5_file[group]
 

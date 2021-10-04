@@ -5,7 +5,7 @@ import numpy as np
 from typing import Tuple
 import pandas as pd
 import time
-from scripts.constants import ROAD_TAG_FEATURE_NAME, OSM_GEOJSON_PATH
+from constants import ROAD_TAG_FEATURE_NAME, OSM_GEOJSON_PATH
 
 
 NUM_TILES = 10

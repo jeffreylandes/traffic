@@ -2,7 +2,7 @@ import geopandas as gpd
 import pandas as pd
 from logs import log
 
-from scripts.constants import (
+from constants import (
     PROCESSED_MERGED_PATH,
     ROAD_TAG_FEATURE_NAME,
     FEATURE_DATA_PATH,
