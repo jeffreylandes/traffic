@@ -18,11 +18,17 @@ In which the Makefile executes a series of `scripts` to create completely proces
 ## Fetching data 
 First you must set up a virtual environment with the necessary deps.
 ```shell script
-$ pip install pipenv && pipenv install --dev
+pip install pipenv && pipenv install --dev
 ```
 Then you may run the makefile.
 ```shell script
 make prepare-data
+```
+
+## Database migrations 
+
+```shell script
+yoyo apply --database postgresql://postgres@localhost/traffic ./migrations
 ```
 
 ## To Dos
