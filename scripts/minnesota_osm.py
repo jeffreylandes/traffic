@@ -6,7 +6,7 @@ from typing import Tuple
 import pandas as pd
 import time
 from constants import ROAD_TAG_FEATURE_NAME, OSM_GEOJSON_PATH
-
+from logs import log
 
 NUM_TILES = 10
 OSM_HIGHWAY_PRIORITY = {
@@ -29,12 +29,12 @@ def make_request(bounds: Tuple[float, float, float, float], attempt: int = 0):
     if attempt > 10:
         raise Exception("Too many requests.")
     try:
-        print(f"Making a overpass request with bounds: {bounds}")
+        log.info(f"Making a overpass request with bounds: {bounds}")
         query = overpass.ql_query(bounds, tag="highway", values=target_values)
         response = overpass.request(query)
         return response
     except OverpassTooManyRequests:
-        print("Too many requests. Waiting 20 seconds before retrying.")
+        log.info("Too many requests. Waiting 20 seconds before retrying.")
         time.sleep(20)
         return make_request(bounds, attempt + 1)
 
@@ -47,7 +47,7 @@ def get_roads_from_bounds(
     if len(feature_collection["features"]) == 0:
         response = make_request(bounds)
         feature_collection = overpass.as_geojson(response, "linestring")
-    print(f"Number of roads: {len(feature_collection['features'])}")
+    log.info(f"Number of roads: {len(feature_collection['features'])}")
     road_data = gpd.GeoDataFrame(feature_collection["features"], crs="EPSG:4326")
     return road_data
 

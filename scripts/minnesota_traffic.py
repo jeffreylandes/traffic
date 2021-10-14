@@ -1,6 +1,7 @@
 import requests
 
 from constants import TRAFFIC_ZIP_PATH, TRAFFIC_URL
+from logs import log
 
 
 def main():
@@ -8,7 +9,7 @@ def main():
     with open(TRAFFIC_ZIP_PATH, "wb") as f:
         for chunk in r.iter_content(chunk_size=128):
             f.write(chunk)
-    print(f"Wrote zipped traffic values to {TRAFFIC_ZIP_PATH}")
+    log(f"Wrote zipped traffic values to {TRAFFIC_ZIP_PATH}")
 
 
 if __name__ == "__main__":

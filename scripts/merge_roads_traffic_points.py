@@ -2,6 +2,8 @@ import geopandas as gpd
 from geopandas.tools import sjoin
 from constants import OSM_GEOJSON_PATH, OSM_TRAFFIC_INITIAL_MERGE_PATH
 
+from logs import log
+
 
 def main():
     # Load OSM roads and reproject geometry
@@ -13,7 +15,7 @@ def main():
     traffic_points = gpd.read_file(
         "data/traffic/Annual_Average_Daily_Traffic_Locations_in_Minnesota.shp"
     )
-    print(f"There are {len(traffic_points)} traffic points.")
+    log.info(f"There are {len(traffic_points)} traffic points.")
     traffic_points["original_geometry"] = traffic_points.geometry.astype(str)
     traffic_points["geometry"] = traffic_points.buffer(15)
     intersection = sjoin(traffic_points, osm_roads, how="left")
