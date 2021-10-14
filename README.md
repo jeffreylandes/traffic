@@ -8,6 +8,7 @@ Simply: they have easily accessible data.
 
 ## Structure
 ```
+| migrations / # contains database migration scripts to create a PostGIS table containing road geometries and their corresponding ADT values.
 | predictive/  # contains scripts to generative featurized data from a GeoPandas dataframe and infrastructure to train a GraphCNN model
 | scripts/  # contains scripts to generate clean data, combining official Minnesota ADT values with OSM road data
 Makefile
@@ -26,7 +27,11 @@ make prepare-data
 ```
 
 ## Database migrations 
-
+First create a Postgres database named `traffic`:
+```shell script
+CREATEDB traffic
+```
+Then apply the following migrations to create a table with the correct specifications.
 ```shell script
 yoyo apply --database postgresql://postgres@localhost/traffic ./migrations
 ```

@@ -6,7 +6,7 @@ __depends__ = {"0002.extensions"}
 
 steps = [
     step(
-        "CREATE TABLE traffic (osm_id VARCHAR(20), ADT FLOAT, PRIMARY KEY (osm_id))",
+        "CREATE TABLE traffic (osm_id INT, adt FLOAT, PRIMARY KEY (osm_id))",
         "DROP TABLE traffic"
     ),
     step(
